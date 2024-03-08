@@ -51,7 +51,7 @@ ONLINE_LLM_MODEL = {
     "zhipu-api": {
         "api_key": "",
         "version": "glm-4",
-        "provider": "ChatGLMWorker",
+        "provider": "ChatGLMWorker", # 即server model_worker中的类
     },
 
     # 具体注册及api key获取请前往 https://api.minimax.chat/

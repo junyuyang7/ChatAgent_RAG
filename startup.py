@@ -186,6 +186,7 @@ def create_model_worker_app(log_level: str = "INFO", **kwargs) -> FastAPI:
             args.awq_ckpt = None
             args.awq_wbits = 16
             args.awq_groupsize = -1
+            # 使用自定义的微调模型路径。由于本项目基于 FastChat 加载 LLM 服务，故需以 FastChat 加载 PEFT 路径，开发者需要保证路径名称里必须有 peft 这个词
             args.model_names = [""]
             args.conv_template = None
             args.limit_worker_concurrency = 5
