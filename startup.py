@@ -34,7 +34,7 @@ from configs import (
 from server.utils import (fschat_controller_address, fschat_model_worker_address,
                           fschat_openai_api_address, get_httpx_client, get_model_worker_config,
                           MakeFastAPIOffline, FastAPI, llm_device, embedding_device)
-# from server.knowledge_base.migrate import create_tables
+from server.knowledge_base.migrate import create_tables
 import argparse
 from typing import List, Dict
 from configs import VERSION
