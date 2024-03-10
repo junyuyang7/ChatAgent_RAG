@@ -8,7 +8,7 @@ from server.db.repository.message_repository import filter_message
 from server.db.models.message_model import MessageModel
 
 
-class ConversationBUfferDBMemory(BaseChatMemory):
+class ConversationBufferDBMemory(BaseChatMemory):
     conversation_id: str
     human_prefix: str = "Human"
     ai_prefix: str = "Assistant"

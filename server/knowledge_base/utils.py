@@ -370,7 +370,7 @@ def files2docs_in_thread(
 
     def file2docs(*, file: KnowledgeFile, **kwargs) -> Tuple[bool, Tuple[str, str, List[Document]]]:
         try:
-            return True, (fil112e.kb_name, file.filename, file.file2text(**kwargs))
+            return True, (file.kb_name, file.filename, file.file2text(**kwargs))
         except Exception as e:
             msg = f"从文件 {file.kb_name}/{file.filename} 加载文档时出错：{e}"
             logger.error(f'{e.__class__.__name__}: {msg}',
