@@ -41,9 +41,9 @@ from configs import VERSION
 
 
 @deprecated(
-    since="0.3.0",
-    message="模型启动功能将于 Langchain-Chatchat 0.3.x重写,支持更多模式和加速启动，0.2.x中相关功能将废弃",
-    removal="0.3.0")
+    since="0.0.1",
+    message="模型启动功能得重写",
+    removal="0.0.1")
 def create_controller_app(
         dispatch_method: str,
         log_level: str = "INFO",
