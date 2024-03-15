@@ -2,10 +2,9 @@ import streamlit as st
 from webui_pages.utils import *
 from st_aggrid import AgGrid, JsCode
 from st_aggrid.grid_options_builder import GridOptionsBuilder
-
 import pandas as pd
 from server.knowledge_base.utils import get_file_path, LOADER_DICT
-from server.knowledge_base.kb_service.base import get_kb_detail, get_kb_file_details
+from server.knowledge_base.kb_service.base import get_kb_details, get_kb_file_details
 from typing import Literal, Dict, Tuple
 from configs import (kbs_config,
                      EMBEDDING_MODEL, DEFAULT_VS_TYPE,
@@ -39,6 +38,7 @@ def config_aggrid(
     )
     return gb
 
+
 def file_exists(kb: str, selected_rows: List) -> Tuple[str, str]:
     """
     check whether a doc file exists in local knowledge base folder.
@@ -51,9 +51,10 @@ def file_exists(kb: str, selected_rows: List) -> Tuple[str, str]:
             return file_name, file_path
     return "", ""
 
+
 def knowledge_base_page(api: ApiRequest, is_lite: bool = None):
     try:
-        kb_list = {x['kb_name']: x for x in get_kb_detail()}
+        kb_list = {x['kb_name']: x for x in get_kb_details()}
     except Exception as e:
         st.error(
             "获取知识库信息错误，请检查是否已按照 `README.md` 中 `4 知识库初始化与迁移` 步骤完成初始化或迁移，或是否为数据库连接错误。")
@@ -364,5 +365,3 @@ def knowledge_base_page(api: ApiRequest, is_lite: bool = None):
                         st.toast("更新文档成功")
                     else:
                         st.toast("更新文档失败")
-
-

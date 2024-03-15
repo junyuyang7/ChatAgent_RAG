@@ -307,6 +307,7 @@ class KnowledgeFile:
             chunk_overlap: int = OVERLAP_SIZE,
             text_splitter: TextSplitter = None,
     ):
+        '''对识别到的内容进行分块'''
         docs = docs or self.file2docs(refresh=refresh)
         if not docs:
             return []

@@ -62,6 +62,7 @@ class FaissKBService(KBService):
                   top_k: int,
                   score_threshold: float = SCORE_THRESHOLD,
                   ) -> List[Tuple[Document, float]]:
+        '''进行检索的地方'''
         embed_func = EmbeddingsFunAdapter(self.embed_model)
         embeddings = embed_func.embed_query(query)
         with self.load_vector_store().acquire() as vs:
