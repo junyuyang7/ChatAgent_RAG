@@ -1,4 +1,4 @@
-# ChatAgent_RAG(参考langchain-chatchat)
+# ChatAgent_RAG
 离线部署大模型，构建一个可以上传本地知识库进行RAG问答且可以自行调用工具的Agent。
 
 目前基于langchain建立了一个简易的RAG应用，Agent正在构建中
