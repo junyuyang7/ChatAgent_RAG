@@ -6,5 +6,6 @@
 #### 使用方法
 初始化数据库
 `python init_database.py -r`
+
 一键启动
 `python startup.py -a`
