@@ -12,7 +12,7 @@ from llama_index.bridge.pydantic import Field, PrivateAttr
 
 
 class LangchainReranker(BaseDocumentCompressor):
-    '''使用'Cohere Rerank API'进行文档压缩'''
+    '''使用'Cohere Rerank API'进行文档压缩，目前使用ChatGLM3模型进行实验'''
     model_name_or_path: str = Field()
     _model: Any = PrivateAttr()
     top_n: int = Field()
