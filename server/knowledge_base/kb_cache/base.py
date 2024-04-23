@@ -143,7 +143,7 @@ class EmbeddingsPool(CachePool):
                                                   openai_api_key=get_model_path(model),
                                                   chunk_size=CHUNK_SIZE)
                 elif 'bge-' in model:
-                    from langchain.embeddings import HuggingFaceBgeEmbeddings
+                    from langchain_community.embeddings.huggingface import HuggingFaceBgeEmbeddings
                     if 'zh' in model:
                         # for chinese model
                         query_instruction = "为这个句子生成表示以用于检索相关文章："

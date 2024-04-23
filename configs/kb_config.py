@@ -16,10 +16,10 @@ CACHED_MEMO_VS_NUM = 10
 CHUNK_SIZE = 250
 
 # 知识库中相邻文本重合长度(不适用MarkdownHeaderTextSplitter)
-OVERLAP_SIZE = 50
+OVERLAP_SIZE = 25
 
 # 知识库匹配向量数量
-VECTOR_SEARCH_TOP_K = 3
+VECTOR_SEARCH_TOP_K = 5
 
 # 知识库匹配的距离阈值，一般取值范围在0-1之间，SCORE越小，距离越小从而相关度越高。
 # 但有用户报告遇到过匹配分值超过1的情况，为了兼容性默认设为1，在WEBUI中调整范围为0-2
@@ -137,10 +137,16 @@ text_splitter_dict = {
                 ("####", "head4"),
             ]
     },
+    "SemanticTextSplitter": {
+        "source": "huggingface",
+        "embedding_name_or_path": "bge-large-zh",
+        'breakpoint_threshold_type': 'percentile',  # ["percentile", "standard_deviation", "interquartile"]
+        'breakpoint_threshold_amount': 0.4
+    },
 }
 
 # TEXT_SPLITTER 名称
-TEXT_SPLITTER_NAME = "SpacyTextSplitter"
+TEXT_SPLITTER_NAME = "SemanticTextSplitter"
 
 # Embedding模型定制词语的词表文件
 EMBEDDING_KEYWORD_FILE = "embedding_keywords.txt"

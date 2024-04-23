@@ -1,17 +1,24 @@
+import os 
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+
 from fastapi import Body, Request
 from sse_starlette.sse import EventSourceResponse
 from fastapi.concurrency import run_in_threadpool
 from configs import (LLM_MODELS,
                      VECTOR_SEARCH_TOP_K,
+                     FUSION_K,
                      SCORE_THRESHOLD,
                      TEMPERATURE,
                      USE_RERANKER,
+                     USE_QUERY_FUSION,
                      RERANKER_MAX_LENGTH,
                      RERANKER_MODEL,
-                     MODEL_PATH)
+                     MODEL_PATH,
+                     MODEL_ROOT_PATH)
 from server.utils import wrap_done, get_ChatOpenAI
 from server.utils import BaseResponse, get_prompt_template
-from langchain.chains import LLMChain
+from langchain.chains.llm import LLMChain
 from langchain.callbacks import AsyncIteratorCallbackHandler
 from typing import AsyncIterable, List, Optional
 import asyncio
@@ -20,9 +27,11 @@ from server.chat.utils import History
 from server.knowledge_base.kb_service.base import KBServiceFactory
 import json
 from urllib.parse import urlencode
-from server.knowledge_base.kb_doc_api import search_docs
+from server.knowledge_base.kb_doc_api import search_docs, search_docs_query_fusion
 from server.reranker.reranker import LangchainReranker
 from server.utils import embedding_device
+from server.chat.rag_fusion import generate_queries
+from transformers import Pipeline, pipeline, AutoTokenizer, AutoModelForCausalLM
 
 async def knowledge_base_chat(query: str = Body(..., description="用户输入", examples=["你好"]),
                               knowledge_base_name: str = Body(..., description="知识库名称", examples=["samples"]),
@@ -79,13 +88,27 @@ async def knowledge_base_chat(query: str = Body(..., description="用户输入",
             max_tokens=max_tokens,
             callbacks=[callback],
         )
-        # Retieval检索 -----------------------------------------------------
-        docs = await run_in_threadpool(search_docs,
-                                       query=query,
-                                       knowledge_base_name=knowledge_base_name,
-                                       top_k=top_k,
-                                       score_threshold=score_threshold)
-        
+
+        if USE_QUERY_FUSION:
+            tokenizer = AutoTokenizer.from_pretrained(MODEL_ROOT_PATH + model_name, trust_remote_code=True)
+            transformer_model = AutoModelForCausalLM.from_pretrained(MODEL_ROOT_PATH + model_name, trust_remote_code=True)
+            pipe = pipeline('text-generation', model=transformer_model, tokenizer=tokenizer, \
+                            max_length=256, temperature=0.6, top_p=0.95, repetition_penalty=1.2, device=embedding_device())
+            # 使用RAG-fusion
+            queries = generate_queries(original_query=query, pipe=pipe)
+            # 将query修改成queries
+            docs = await run_in_threadpool(search_docs_query_fusion,
+                                        queries=queries,
+                                        knowledge_base_name=knowledge_base_name,
+                                        top_k=top_k,
+                                        score_threshold=score_threshold)
+        else:
+            docs = await run_in_threadpool(search_docs,
+                                        query=query,
+                                        knowledge_base_name=knowledge_base_name,
+                                        top_k=top_k,
+                                        score_threshold=score_threshold)
+
         # 加入reranker
         if USE_RERANKER:
             reranker_model_path = MODEL_PATH["reranker"].get(RERANKER_MODEL,"BAAI/bge-reranker-large")

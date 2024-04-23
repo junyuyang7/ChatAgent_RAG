@@ -1,0 +1,43 @@
+2024-04-23 03:00:46 | INFO | model_worker | Loading the model ['llm_models/chatglm3-6b'] on worker 45cfec25 ...
+2024-04-23 03:00:46 | ERROR | stderr | Process model_worker - llm_models/chatglm3-6b:
+2024-04-23 03:00:46 | ERROR | stderr | Traceback (most recent call last):
+2024-04-23 03:00:46 | ERROR | stderr |   File "/home/yangjy/anaconda3/envs/chatchat/lib/python3.11/site-packages/transformers/utils/hub.py", line 385, in cached_file
+2024-04-23 03:00:46 | ERROR | stderr |     resolved_file = hf_hub_download(
+2024-04-23 03:00:46 | ERROR | stderr |                     ^^^^^^^^^^^^^^^^
+2024-04-23 03:00:46 | ERROR | stderr |   File "/home/yangjy/anaconda3/envs/chatchat/lib/python3.11/site-packages/huggingface_hub/utils/_validators.py", line 111, in _inner_fn
+2024-04-23 03:00:46 | ERROR | stderr |     validate_repo_id(arg_value)
+2024-04-23 03:00:46 | ERROR | stderr |   File "/home/yangjy/anaconda3/envs/chatchat/lib/python3.11/site-packages/huggingface_hub/utils/_validators.py", line 165, in validate_repo_id
+2024-04-23 03:00:46 | ERROR | stderr |     raise HFValidationError(
+2024-04-23 03:00:46 | ERROR | stderr | huggingface_hub.utils._validators.HFValidationError: Repo id must use alphanumeric chars or '-', '_', '.', '--' and '..' are forbidden, '-' and '.' cannot start or end the name, max length is 96: ''.
+2024-04-23 03:00:46 | ERROR | stderr | 
+2024-04-23 03:00:46 | ERROR | stderr | The above exception was the direct cause of the following exception:
+2024-04-23 03:00:46 | ERROR | stderr | 
+2024-04-23 03:00:46 | ERROR | stderr | Traceback (most recent call last):
+2024-04-23 03:00:46 | ERROR | stderr |   File "/home/yangjy/anaconda3/envs/chatchat/lib/python3.11/multiprocessing/process.py", line 314, in _bootstrap
+2024-04-23 03:00:46 | ERROR | stderr |     self.run()
+2024-04-23 03:00:46 | ERROR | stderr |   File "/home/yangjy/anaconda3/envs/chatchat/lib/python3.11/multiprocessing/process.py", line 108, in run
+2024-04-23 03:00:46 | ERROR | stderr |     self._target(*self._args, **self._kwargs)
+2024-04-23 03:00:46 | ERROR | stderr |   File "/home/yangjy/Study/ChatAgent_RAG/startup.py", line 390, in run_model_worker
+2024-04-23 03:00:46 | ERROR | stderr |     app = create_model_worker_app(log_level=log_level, **kwargs)
+2024-04-23 03:00:46 | ERROR | stderr |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2024-04-23 03:00:46 | ERROR | stderr |   File "/home/yangjy/Study/ChatAgent_RAG/startup.py", line 218, in create_model_worker_app
+2024-04-23 03:00:46 | ERROR | stderr |     worker = ModelWorker(
+2024-04-23 03:00:46 | ERROR | stderr |              ^^^^^^^^^^^^
+2024-04-23 03:00:46 | ERROR | stderr |   File "/home/yangjy/anaconda3/envs/chatchat/lib/python3.11/site-packages/fastchat/serve/model_worker.py", line 77, in __init__
+2024-04-23 03:00:46 | ERROR | stderr |     self.model, self.tokenizer = load_model(
+2024-04-23 03:00:46 | ERROR | stderr |                                  ^^^^^^^^^^^
+2024-04-23 03:00:46 | ERROR | stderr |   File "/home/yangjy/anaconda3/envs/chatchat/lib/python3.11/site-packages/fastchat/model/model_adapter.py", line 348, in load_model
+2024-04-23 03:00:46 | ERROR | stderr |     model, tokenizer = adapter.load_model(model_path, kwargs)
+2024-04-23 03:00:46 | ERROR | stderr |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2024-04-23 03:00:46 | ERROR | stderr |   File "/home/yangjy/anaconda3/envs/chatchat/lib/python3.11/site-packages/fastchat/model/model_adapter.py", line 84, in load_model
+2024-04-23 03:00:46 | ERROR | stderr |     tokenizer = AutoTokenizer.from_pretrained(
+2024-04-23 03:00:46 | ERROR | stderr |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2024-04-23 03:00:46 | ERROR | stderr |   File "/home/yangjy/anaconda3/envs/chatchat/lib/python3.11/site-packages/transformers/models/auto/tokenization_auto.py", line 758, in from_pretrained
+2024-04-23 03:00:46 | ERROR | stderr |     tokenizer_config = get_tokenizer_config(pretrained_model_name_or_path, **kwargs)
+2024-04-23 03:00:46 | ERROR | stderr |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2024-04-23 03:00:46 | ERROR | stderr |   File "/home/yangjy/anaconda3/envs/chatchat/lib/python3.11/site-packages/transformers/models/auto/tokenization_auto.py", line 590, in get_tokenizer_config
+2024-04-23 03:00:46 | ERROR | stderr |     resolved_config_file = cached_file(
+2024-04-23 03:00:46 | ERROR | stderr |                            ^^^^^^^^^^^^
+2024-04-23 03:00:46 | ERROR | stderr |   File "/home/yangjy/anaconda3/envs/chatchat/lib/python3.11/site-packages/transformers/utils/hub.py", line 450, in cached_file
+2024-04-23 03:00:46 | ERROR | stderr |     raise EnvironmentError(
+2024-04-23 03:00:46 | ERROR | stderr | OSError: Incorrect path_or_model_id: ''. Please provide either the path to a local folder or the repo_id of a model on the Hub.

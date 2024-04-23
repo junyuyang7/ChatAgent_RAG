@@ -1,4 +1,6 @@
 import os
+
+from langchain_community.document_loaders.json_loader import JSONLoader
 from configs import (
     KB_ROOT_PATH,
     CHUNK_SIZE,
@@ -128,7 +130,7 @@ if json.dumps is not _new_json_dumps:
     json.dumps = _new_json_dumps
 
 
-class JSONLinesLoader(langchain.document_loaders.JSONLoader):
+class JSONLinesLoader(JSONLoader):
     '''
     行式 Json 加载器，要求文件扩展名为 .jsonl
     '''
@@ -199,6 +201,37 @@ def make_text_splitter(
             headers_to_split_on = text_splitter_dict[splitter_name]['headers_to_split_on']
             text_splitter = langchain.text_splitter.MarkdownHeaderTextSplitter(
                 headers_to_split_on=headers_to_split_on)
+        elif splitter_name == 'SemanticTextSplitter':
+            try:  ## 使用自定义的语义分块
+                text_splitter_module = importlib.import_module('text_splitter')
+                TextSplitter = getattr(text_splitter_module, splitter_name)
+                try:
+                    embedding_name = text_splitter_dict[splitter_name]["embedding_name_or_path"]
+                    breakpoint_threshold_type = text_splitter_dict[splitter_name]["breakpoint_threshold_type"]
+                    breakpoint_threshold_amount = text_splitter_dict[splitter_name]["breakpoint_threshold_amount"]
+                except Exception as e:
+                    print('HEIHEIHEI-使用SemanticTextSplitter时加载embedding model出错了：', e, '\n这里就使用text-embedding-ada-002了')
+                
+                from langchain_community.embeddings.huggingface import HuggingFaceBgeEmbeddings, HuggingFaceEmbeddings
+                from server.utils import embedding_device
+                from langchain_openai.embeddings import OpenAIEmbeddings
+
+                if embedding_name == "text-embedding-ada-002":  # openai text-embedding-ada-002
+                    embeddings = OpenAIEmbeddings(model=embedding_name,
+                                                chunk_size=CHUNK_SIZE)
+                elif 'bge-' in embedding_name:
+                    embeddings = HuggingFaceBgeEmbeddings(model_name=embedding_name,
+                                                        model_kwargs={'device': embedding_device()})
+                else:
+                    embeddings = HuggingFaceEmbeddings(model_name=embedding_name,
+                                                    model_kwargs={'device': embedding_device()},
+                                                    query_instruction='')
+                    
+                text_splitter = TextSplitter(embeddings=embeddings, 
+                                        breakpoint_threshold_type=breakpoint_threshold_type, 
+                                        breakpoint_threshold_amount=breakpoint_threshold_amount)
+            except Exception as e:
+                print(os.path.dirname(__file__), 'line 207 出错了。\n错误是：', e)
         else:
 
             try:  ## 优先使用用户自定义的text_splitter
@@ -237,6 +270,7 @@ def make_text_splitter(
                     tokenizer = AutoTokenizer.from_pretrained(
                         text_splitter_dict[splitter_name]["tokenizer_name_or_path"],
                         trust_remote_code=True)
+                # 使用tokenizer来计算文档长度从而分词
                 text_splitter = TextSplitter.from_huggingface_tokenizer(
                     tokenizer=tokenizer,
                     chunk_size=chunk_size,
@@ -255,7 +289,7 @@ def make_text_splitter(
                         chunk_overlap=chunk_overlap
                     )
     except Exception as e:
-        print(e)
+        print('加载文本分割器出错了：', e, '\n现在自动加载langchain.text_splitter.RecursiveCharacterTextSplitter')
         text_splitter_module = importlib.import_module('langchain.text_splitter')
         TextSplitter = getattr(text_splitter_module, "RecursiveCharacterTextSplitter")
         text_splitter = TextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
@@ -362,7 +396,7 @@ def files2docs_in_thread(
         chunk_size: int = CHUNK_SIZE,
         chunk_overlap: int = OVERLAP_SIZE,
         zh_title_enhance: bool = ZH_TITLE_ENHANCE,
-) -> Generator:
+) -> Generator:  # sourcery skip: yield-from
     '''
     利用多线程批量将磁盘文件转化成langchain Document.
     如果传入参数是Tuple，形式为(filename, kb_name)
@@ -408,7 +442,7 @@ if __name__ == "__main__":
     from pprint import pprint
 
     kb_file = KnowledgeFile(
-        filename="/home/congyin/Code/Project_Langchain_0814/Langchain-Chatchat/knowledge_base/csv1/content/gm.csv",
+        filename="/home/yangjy/Study/ChatAgent_RAG/knowledge_base/samples/content/test_files/langchain-ChatGLM_closed.csv",
         knowledge_base_name="samples")
     # kb_file.text_splitter_name = "RecursiveCharacterTextSplitter"
     docs = kb_file.file2docs()

@@ -17,6 +17,46 @@ from server.db.repository.knowledge_file_repository import get_file_detail
 from langchain.docstore.document import Document
 from server.knowledge_base.model.kb_document_model import DocumentWithVSId
 from typing import List, Dict
+from server.chat.rag_fusion import reciprocal_rank_fusion
+
+def search_docs_query_fusion(
+        queries: str = Body([""], description="用户输入", examples=[["你好"]]),
+        knowledge_base_name: str = Body(..., description="知识库名称", examples=["samples"]),
+        top_k: int = Body(VECTOR_SEARCH_TOP_K, description="匹配向量数"),
+        score_threshold: float = Body(SCORE_THRESHOLD,
+                                      description="知识库匹配相关度阈值，取值范围在0-1之间，"
+                                                  "SCORE越小，相关度越高，"
+                                                  "取到1相当于不筛选，建议设置在0.5左右",
+                                      ge=0, le=1),
+        file_name: str = Body("", description="文件名称，支持 sql 通配符"),
+        metadata: dict = Body({}, description="根据 metadata 进行过滤，仅支持一级键"),
+) -> List[DocumentWithVSId]:
+    '''
+    检索最相关的top-k个文档
+    '''
+    kb = KBServiceFactory.get_service_by_name(knowledge_base_name)
+    data = []
+    if kb is not None:
+        if queries:
+            all_results = {}
+            id_doc_dict = {}
+            for query in queries:
+                docs = kb.search_docs(query, top_k, score_threshold)
+                id_score_dict = {}
+                # 记录召回的doc和score
+                for x in docs:
+                    # unhashable type: 'Document'
+                    id_score_dict[x[0].metadata.get("id")] = x[1]
+                    id_doc_dict[x[0].metadata.get("id")] = x[0]
+                id_score_dict = {doc: score for doc, score in sorted(id_score_dict.items(), key=lambda x: x[1], reverse=True)}
+                all_results[query] = id_score_dict
+            # 计算RRF分数重新排序
+            reranked_results = reciprocal_rank_fusion(all_results, k=5)
+            
+            data = [DocumentWithVSId(page_content=id_doc_dict[k].page_content, metadata=id_doc_dict[k].metadata, score=v, id=k) for k, v in reranked_results.items()]
+        elif file_name or metadata:
+            data = kb.list_docs(file_name=file_name, metadata=metadata)
+    return data
 
 
 def search_docs(

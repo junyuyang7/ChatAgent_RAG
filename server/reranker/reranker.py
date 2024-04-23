@@ -9,6 +9,7 @@ from langchain_core.documents import Document
 from langchain.callbacks.manager import Callbacks
 from langchain.retrievers.document_compressors.base import BaseDocumentCompressor
 from llama_index.bridge.pydantic import Field, PrivateAttr
+from langchain_community.embeddings import CohereEmbeddings
 
 
 class LangchainReranker(BaseDocumentCompressor):
@@ -64,6 +65,10 @@ class LangchainReranker(BaseDocumentCompressor):
         doc_list = list(documents)
         _docs = [d.page_content for d in doc_list]
         sentence_pairs = [[query, _doc] for _doc in _docs]
+        
+        # 这里可以使用 文本摘要模型 进行信息压缩的
+        # _doc = summary_generate(query, doc)
+
         results = self._model.predict(sentences=sentence_pairs,
                                       batch_size=self.batch_size,
                                       #  show_progress_bar=self.show_progress_bar,

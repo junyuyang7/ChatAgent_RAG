@@ -39,7 +39,7 @@ def test_chat(worker):
 def test_embeddings(worker):
     params = ApiEmbeddingsParams(
         texts = [
-            "LangChain-Chatchat (原 Langchain-ChatGLM): 基于 Langchain 与 ChatGLM 等大语言模型的本地知识库问答应用实现。",
+            "ChatAgent_RAG (原 Langchain-ChatGLM): 基于 Langchain 与 ChatGLM 等大语言模型的本地知识库问答应用实现。",
             "一种利用 langchain 思想实现的基于本地知识库的问答应用，目标期望建立一套对中文场景与开源模型支持友好、可离线运行的知识库问答解决方案。",
         ]
     )

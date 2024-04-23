@@ -7,10 +7,8 @@ from server.knowledge_base.kb_cache.base import *
 from server.knowledge_base.kb_service.base import EmbeddingsFunAdapter
 from server.utils import load_local_embeddings
 from server.knowledge_base.utils import get_vs_path
-from langchain.vectorstores.faiss import FAISS
+from langchain_community.vectorstores import FAISS
 from langchain.docstore.in_memory import InMemoryDocstore
-from langchain.schema import Document
-import os
 from langchain.schema import Document
 
 # patch FAISS to include doc id in Document.metadata
@@ -102,7 +100,7 @@ class KBFaissPool(_FaissPool):
 
                 if os.path.isfile(os.path.join(vs_path, "index.faiss")):
                     embeddings = self.load_kb_embeddings(kb_name=kb_name, embed_device=embed_device, default_embed_model=embed_model)
-                    vector_store = FAISS.load_local(vs_path, embeddings, normalize_L2=True,distance_strategy="METRIC_INNER_PRODUCT")
+                    vector_store = FAISS.load_local(vs_path, embeddings, normalize_L2=True, distance_strategy="METRIC_INNER_PRODUCT", allow_dangerous_deserialization=True)
                 elif create:
                     # create an empty vector store
                     if not os.path.exists(vs_path):

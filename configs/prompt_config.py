@@ -17,6 +17,17 @@
 #   - agent_scratchpad: Agent的思维记录
 
 PROMPT_TEMPLATES = {
+    "rag-fusion": {
+        "default":
+            '{original_query}',
+        
+        "fusion_en": 
+            "You are a helpful assistant that generates multiple search queries based on a single input query."
+            "Please Generate multiple search queries related to: {original_query}"
+            "OUTPUT ({k_query} queries): \n\n"
+
+    },
+
     "llm_chat": {
         "default":
             '{{ input }}',

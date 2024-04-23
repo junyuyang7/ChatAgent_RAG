@@ -2,7 +2,7 @@ from fastapi import Body
 from sse_starlette.sse import EventSourceResponse
 from configs import LLM_MODELS, TEMPERATURE
 from server.utils import wrap_done, get_ChatOpenAI
-from langchain.chains import LLMChain
+from langchain.chains.llm import LLMChain
 from langchain.callbacks import AsyncIteratorCallbackHandler
 from typing import AsyncIterable, List, Optional, Union
 import asyncio

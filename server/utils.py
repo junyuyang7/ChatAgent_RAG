@@ -9,8 +9,8 @@ from configs import (LLM_MODELS, LLM_DEVICE, EMBEDDING_DEVICE,
                      FSCHAT_MODEL_WORKERS, HTTPX_DEFAULT_TIMEOUT)
 import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from langchain.chat_models import ChatOpenAI
-from langchain.llms import OpenAI
+from langchain_community.chat_models import ChatOpenAI
+from langchain_community.llms.openai import OpenAI
 import httpx
 from typing import (
     TYPE_CHECKING,
@@ -381,6 +381,7 @@ def get_model_worker_config(model_name: str = None) -> dict:
     from server import model_workers
 
     config = FSCHAT_MODEL_WORKERS.get("default", {}).copy()
+    os.environ["CUDA_VISIBLE_DEVICES"]= config["gpus"]
     config.update(ONLINE_LLM_MODEL.get(model_name, {}).copy())
     config.update(FSCHAT_MODEL_WORKERS.get(model_name, {}).copy())
 
@@ -404,6 +405,7 @@ def get_model_worker_config(model_name: str = None) -> dict:
 
 
 def get_all_model_worker_configs() -> dict:
+    # sourcery skip: dict-comprehension, move-assign-in-block
     result = {}
     model_names = set(FSCHAT_MODEL_WORKERS.keys())
     for name in model_names:

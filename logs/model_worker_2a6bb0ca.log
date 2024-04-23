@@ -1,0 +1,19 @@
+2024-04-23 02:45:32 | INFO | model_worker | Loading the model ['qwen-1.5-v2-7b'] on worker 2a6bb0ca ...
+2024-04-23 02:45:32 | ERROR | stderr | Process model_worker - qwen-1.5-v2-7b:
+2024-04-23 02:45:32 | ERROR | stderr | Traceback (most recent call last):
+2024-04-23 02:45:32 | ERROR | stderr |   File "/home/yangjy/anaconda3/envs/chatchat/lib/python3.11/multiprocessing/process.py", line 314, in _bootstrap
+2024-04-23 02:45:32 | ERROR | stderr |     self.run()
+2024-04-23 02:45:32 | ERROR | stderr |   File "/home/yangjy/anaconda3/envs/chatchat/lib/python3.11/multiprocessing/process.py", line 108, in run
+2024-04-23 02:45:32 | ERROR | stderr |     self._target(*self._args, **self._kwargs)
+2024-04-23 02:45:32 | ERROR | stderr |   File "/home/yangjy/Study/ChatAgent_RAG/startup.py", line 390, in run_model_worker
+2024-04-23 02:45:32 | ERROR | stderr |     app = create_model_worker_app(log_level=log_level, **kwargs)
+2024-04-23 02:45:32 | ERROR | stderr |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2024-04-23 02:45:32 | ERROR | stderr |   File "/home/yangjy/Study/ChatAgent_RAG/startup.py", line 218, in create_model_worker_app
+2024-04-23 02:45:32 | ERROR | stderr |     worker = ModelWorker(
+2024-04-23 02:45:32 | ERROR | stderr |              ^^^^^^^^^^^^
+2024-04-23 02:45:32 | ERROR | stderr |   File "/home/yangjy/anaconda3/envs/chatchat/lib/python3.11/site-packages/fastchat/serve/model_worker.py", line 77, in __init__
+2024-04-23 02:45:32 | ERROR | stderr |     self.model, self.tokenizer = load_model(
+2024-04-23 02:45:32 | ERROR | stderr |                                  ^^^^^^^^^^^
+2024-04-23 02:45:32 | ERROR | stderr |   File "/home/yangjy/anaconda3/envs/chatchat/lib/python3.11/site-packages/fastchat/model/model_adapter.py", line 257, in load_model
+2024-04-23 02:45:32 | ERROR | stderr |     raise ValueError(f"Invalid device: {device}")
+2024-04-23 02:45:32 | ERROR | stderr | ValueError: Invalid device: auto

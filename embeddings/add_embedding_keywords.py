@@ -24,11 +24,6 @@ from sentence_transformers import SentenceTransformer
 from langchain_core._api import deprecated
 
 
-@deprecated(
-        since="0.3.0",
-        message="自定义关键词 Langchain-Chatchat 0.3.x 重写, 0.2.x中相关功能将废弃",
-        removal="0.3.0"
-    )
 def get_keyword_embedding(bert_model, tokenizer, key_words):
     tokenizer_output = tokenizer(key_words, return_tensors="pt", padding=True, truncation=True)
     input_ids = tokenizer_output['input_ids']

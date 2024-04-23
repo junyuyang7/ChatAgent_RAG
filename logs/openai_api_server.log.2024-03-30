@@ -1,0 +1,12 @@
+2024-03-30 02:14:35 | ERROR | stderr | [32mINFO[0m:     Started server process [[36m3094993[0m]
+2024-03-30 02:14:35 | ERROR | stderr | [32mINFO[0m:     Waiting for application startup.
+2024-03-30 02:14:35 | ERROR | stderr | [32mINFO[0m:     Application startup complete.
+2024-03-30 02:14:35 | ERROR | stderr | [32mINFO[0m:     Uvicorn running on [1mhttp://0.0.0.0:20000[0m (Press CTRL+C to quit)
+2024-03-30 02:17:18 | INFO | stdout | [32mINFO[0m:     127.0.0.1:49650 - "[1mPOST /v1/chat/completions HTTP/1.1[0m" [32m200 OK[0m
+2024-03-30 02:18:05 | INFO | stdout | [32mINFO[0m:     127.0.0.1:56116 - "[1mPOST /v1/chat/completions HTTP/1.1[0m" [32m200 OK[0m
+2024-03-30 02:23:05 | INFO | stdout | [32mINFO[0m:     127.0.0.1:53206 - "[1mPOST /v1/chat/completions HTTP/1.1[0m" [32m200 OK[0m
+2024-03-30 02:23:32 | INFO | stdout | [32mINFO[0m:     127.0.0.1:50460 - "[1mPOST /v1/chat/completions HTTP/1.1[0m" [32m200 OK[0m
+2024-03-30 02:24:09 | INFO | stdout | [32mINFO[0m:     127.0.0.1:52922 - "[1mPOST /v1/chat/completions HTTP/1.1[0m" [32m200 OK[0m
+2024-03-30 02:24:31 | INFO | stdout | [32mINFO[0m:     127.0.0.1:48372 - "[1mPOST /v1/chat/completions HTTP/1.1[0m" [32m200 OK[0m
+2024-03-30 02:24:51 | INFO | stdout | [32mINFO[0m:     127.0.0.1:42574 - "[1mPOST /v1/chat/completions HTTP/1.1[0m" [32m200 OK[0m
+2024-03-30 02:25:52 | INFO | stdout | [32mINFO[0m:     127.0.0.1:50882 - "[1mPOST /v1/chat/completions HTTP/1.1[0m" [32m200 OK[0m

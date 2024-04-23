@@ -1,0 +1,15 @@
+{
+  "server/chat/test/test_knowledge_base_chat.py::test_knowledge_base_chat[happy-path]": true,
+  "server/chat/test/test_knowledge_base_chat.py::test_knowledge_base_chat[happy-path-with-history-and-stream]": true,
+  "server/chat/test/test_knowledge_base_chat.py::test_knowledge_base_chat[edge-minimal-values]": true,
+  "server/chat/test/test_knowledge_base_chat.py::test_knowledge_base_chat[error-kb-not-found]": true,
+  "server/chat/test/test_knowledge_base_chat.py::test_knowledge_base_chat[happy-path-with-history]": true,
+  "server/chat/test/test_knowledge_base_chat.py::test_knowledge_base_chat[edge-case-empty-query]": true,
+  "server/chat/test/test_knowledge_base_chat.py::test_knowledge_base_chat[error-nonexistent-kb]": true,
+  "server/chat/test/test_knowledge_base_chat.py::test_search_docs_query_fusion_happy_path[HP-1]": true,
+  "server/chat/test/test_knowledge_base_chat.py::test_search_docs_query_fusion_happy_path[HP-2]": true,
+  "server/chat/test/test_knowledge_base_chat.py::test_search_docs_query_fusion_happy_path[HP-3]": true,
+  "server/chat/test/test_knowledge_base_chat.py::test_search_docs_query_fusion_edge_cases[EC-1]": true,
+  "server/chat/test/test_knowledge_base_chat.py::test_search_docs_query_fusion_edge_cases[EC-2]": true,
+  "server/chat/test/test_knowledge_base_chat.py::test_search_docs_query_fusion_error_cases[ERR-1]": true
+}

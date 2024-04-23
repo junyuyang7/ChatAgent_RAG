@@ -8,6 +8,7 @@ from server.knowledge_base.utils import KnowledgeFile, get_kb_path, get_vs_path
 from server.utils import torch_gc
 from langchain.docstore.document import Document
 from typing import List, Dict, Optional, Tuple
+from langchain_community.vectorstores import FAISS
 
 
 class FaissKBService(KBService):
@@ -34,10 +35,12 @@ class FaissKBService(KBService):
 
     def get_doc_by_ids(self, ids: List[str]) -> List[Document]:
         with self.load_vector_store().acquire() as vs:
+            vs: FAISS
             return [vs.docstore._dict.get(id) for id in ids]
 
     def del_doc_by_ids(self, ids: List[str]) -> bool:
         with self.load_vector_store().acquire() as vs:
+            vs: FAISS
             vs.delete(ids)
 
     def do_init(self):
@@ -66,6 +69,7 @@ class FaissKBService(KBService):
         embed_func = EmbeddingsFunAdapter(self.embed_model)
         embeddings = embed_func.embed_query(query)
         with self.load_vector_store().acquire() as vs:
+            vs: FAISS
             docs = vs.similarity_search_with_score_by_vector(embeddings, k=top_k, score_threshold=score_threshold)
         return docs
 
@@ -89,6 +93,7 @@ class FaissKBService(KBService):
                       kb_file: KnowledgeFile,
                       **kwargs):
         with self.load_vector_store().acquire() as vs:
+            vs: FAISS
             ids = [k for k, v in vs.docstore._dict.items() if v.metadata.get("source").lower() == kb_file.filename.lower()]
             if len(ids) > 0:
                 vs.delete(ids)

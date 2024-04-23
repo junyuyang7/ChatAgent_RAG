@@ -1,3 +1,7 @@
+import os 
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+
 from typing import List
 from langchain.document_loaders.unstructured import UnstructuredFileLoader
 import cv2
@@ -37,18 +41,21 @@ class RapidOCRPDFLoader(UnstructuredFileLoader):
         def pdf2text(filepath):
             import fitz # pyMuPDF里面的fitz包，不要与pip install fitz混淆
             import numpy as np
+
             ocr = get_ocr()
             doc = fitz.open(filepath)
             resp = ""
-
+            
             b_unit = tqdm.tqdm(total=doc.page_count, desc="RapidOCRPDFLoader context page index: 0")
             for i, page in enumerate(doc):
                 b_unit.set_description("RapidOCRPDFLoader context page index: {}".format(i))
                 b_unit.refresh()
                 text = page.get_text("")
                 resp += text + "\n"
-
+                table_list = page.find_tables()
                 img_list = page.get_image_info(xrefs=True)
+
+                # 处理图片
                 for img in img_list:
                     if xref := img.get("xref"):
                         bbox = img["bbox"]
@@ -82,6 +89,6 @@ class RapidOCRPDFLoader(UnstructuredFileLoader):
 
 
 if __name__ == "__main__":
-    loader = RapidOCRPDFLoader(file_path="/Users/tonysong/Desktop/test.pdf")
+    loader = RapidOCRPDFLoader(file_path="test.pdf")
     docs = loader.load()
     print(docs)

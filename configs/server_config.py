@@ -38,6 +38,8 @@ FSCHAT_MODEL_WORKERS = {
         "host": DEFAULT_BIND_HOST,
         "port": 20002,
         "device": LLM_DEVICE,
+        # TODO: 多卡加载
+        "gpus": '2,3',
         # False,'vllm',使用的推理加速框架,使用vllm如果出现HuggingFace通信问题，参见doc/FAQ
         # vllm对一些模型支持还不成熟，暂时默认关闭
         "infer_turbo": False,
